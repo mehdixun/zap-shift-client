@@ -1,6 +1,7 @@
 import React from 'react';
 
-const ReviewsCard = () => {
+const ReviewsCard = ({review}) => {
+    const { } = review;
     return (
         <div>
             

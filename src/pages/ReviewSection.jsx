@@ -9,7 +9,7 @@ const ReviewSection = ({ reviewPromise }) => {
   return (
     <div>
       <div className="text-center">
-        <h3>Our Reviews</h3>
+        <h3 className="text-3xl font-bold">Our Reviews</h3>
         <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum
           accusantium facere quidem asperiores corporis delectus expedita vero
