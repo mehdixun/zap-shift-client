@@ -1,16 +1,23 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import UseAuth from "../../hooks/UseAuth";
+import { Link } from "react-router";
+import SocialLogin from "./SocialLogin";
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { registerUser } = UseAuth();
 
   const handleRegister = (data) => {
-    console.log('After register', data);
+    console.log('After register', data.photo[0]);
+    const profileImg = data.photo[0];
     registerUser(data.email, data.password)
       .then(result => {
         console.log(result.user);
+
+        // Store the image and get the photo url
+        const formData = new FormData();
+        formData.append('image', profileImg)
       })
       .catch(error => {
         console.log(error);
@@ -19,14 +26,40 @@ const Register = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(handleRegister)}>
+      <form onSubmit={handleSubmit(handleRegister)} className="my-20">
+        <h2 className="text-3xl font-bold text-center">New To ZapShift? , Please Register...</h2>
         <fieldset className="fieldset">
+
+        {/* Name */}
+          <label className="label">Name</label>
+          <input 
+            type="text" 
+            {...register('name', { required: true })} 
+            className="input w-full" 
+            placeholder="Name" 
+          />
+          {errors.email?.type === 'required' && (
+            <p className="text-red-500">Name is required</p>
+          )}
+
+          {/* Photo */}
+          <label className="label">Photo URL</label>
+          <input 
+            type="file" 
+            {...register('photo', { required: true })} 
+            className="file-input w-full" 
+            placeholder="Photo URL" 
+          />
+          {errors.email?.type === 'required' && (
+            <p className="text-red-500">Photo is required</p>
+          )}
+
           {/* Email */}
           <label className="label">Email</label>
           <input 
             type="email" 
             {...register('email', { required: true })} 
-            className="input" 
+            className="input w-full" 
             placeholder="Email" 
           />
           {errors.email?.type === 'required' && (
@@ -38,7 +71,7 @@ const Register = () => {
           <input 
             type="password" 
             {...register('password', { required: true, minLength: 6 })} 
-            className="input" 
+            className="input w-full" 
             placeholder="Password" 
           />
           {errors.password?.type === 'required' && (
@@ -49,6 +82,8 @@ const Register = () => {
           )}
 
           <button type="submit" className="btn btn-neutral mt-4">Register</button>
+          <SocialLogin></SocialLogin>
+          <h3 className="text-md font-semibold text-center mt-2">Already Have An Account? Please <Link className="text-green-500 underline font-bold" to='/login'>Login Now</Link> </h3>
         </fieldset>
       </form>
     </div>
