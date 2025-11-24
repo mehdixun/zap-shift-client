@@ -1,12 +1,16 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import UseAuth from "../../hooks/UseAuth";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
+import axios from "axios";
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { registerUser } = UseAuth();
+  const { registerUser, updateUserProfile } = UseAuth();
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleRegister = (data) => {
     console.log('After register', data.photo[0]);
@@ -15,9 +19,29 @@ const Register = () => {
       .then(result => {
         console.log(result.user);
 
-        // Store the image and get the photo url
+        // Store the image in form data
         const formData = new FormData();
         formData.append('image', profileImg)
+
+        // Send the photo to store and get the URL
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`
+        axios.post(image_API_URL, formData)
+        .then(res => {
+          console.log('after image upload', res.data.data.url )
+
+          // Update user profile
+          const userProfile = {
+            displayName : data.name,
+            photoURL: res.data.data.url
+          }
+          updateUserProfile(userProfile)
+          .then(() => {
+            console.log('user profile updated done')
+          })
+          .catch(error => {
+            console.log(error)
+          })
+        })
       })
       .catch(error => {
         console.log(error);
@@ -83,7 +107,7 @@ const Register = () => {
 
           <button type="submit" className="btn btn-neutral mt-4">Register</button>
           <SocialLogin></SocialLogin>
-          <h3 className="text-md font-semibold text-center mt-2">Already Have An Account? Please <Link className="text-green-500 underline font-bold" to='/login'>Login Now</Link> </h3>
+          <h3 className="text-md font-semibold text-center mt-2">Already Have An Account? Please <Link state={location.state} className="text-green-500 underline font-bold" to='/login'>Login Now</Link> </h3>
         </fieldset>
       </form>
     </div>

@@ -19,6 +19,7 @@ const Navbar = () => {
     const links = <>
     <li><NavLink to='/'>Home</NavLink></li>
     <li><NavLink to='/about'>About US</NavLink></li>
+    <li><NavLink to='/send-parcel'>Send Parcel</NavLink></li>
     <li><NavLink to='/coverage'>Coverege</NavLink></li>
     </>
     return (
@@ -50,7 +51,7 @@ const Navbar = () => {
       : 
       <NavLink to='/login' className="btn bg-green-300">Log In</NavLink> 
     }
-    <NavLink to='/beARider' className="btn bg-green-300">Be A Rider</NavLink>
+    <NavLink to='/rider' className="btn bg-green-300">Be A Rider</NavLink>
   </div>
   
     
